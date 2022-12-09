@@ -1,6 +1,9 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from itertools import count
+from IPython import display
 
 # Identify pixels above the threshold
 # Threshold of RGB > 160 does a nice job of identifying ground pixels only
@@ -163,6 +166,28 @@ def perception_step(Rover):
     # Update Rover pixel distances and angles
     Rover.nav_dists, Rover.nav_angles = to_polar_coords(xpix, ypix)
 
+    
+    debugging_mode = True
+
+    if debugging_mode:
+        plt.figure(1, figsize=(12,9))
+        plt.clf()
+        plt.subplot(221)
+        plt.imshow(Rover.img)
+        plt.subplot(222)
+        plt.imshow(warped)
+        plt.subplot(223)
+        plt.imshow(threshed, cmap='gray')
+        plt.subplot(224)
+        plt.plot(xpix, ypix, '.')
+        plt.ylim(-160, 160)
+        plt.xlim(0, 160)
+        arrow_length = 100
+        mean_dir = np.mean(Rover.nav_angles)
+        x_arrow = arrow_length * np.cos(mean_dir)
+        y_arrow = arrow_length * np.sin(mean_dir)
+        plt.arrow(0, 0, x_arrow, y_arrow, color='red', zorder=2, head_width=10, width=2)
+        plt.pause(1)
 
     # if rocks_thresh.any():
     #     Rover.nav_dists, Rover.nav_angles = to_polar_coords(xrocks, yrocks)
