@@ -29,7 +29,7 @@ app = Flask(__name__)
 # Read in ground truth map and create 3-channel green version for overplotting
 # NOTE: images are read in by default with the origin (0, 0) in the upper left
 # and y-axis increasing downward.
-ground_truth = mpimg.imread('../calibration_images/map_bw.png')
+ground_truth = mpimg.imread('calibration_images/map_bw.png')
 # This next line creates arrays of zeros in the red and blue channels
 # and puts the map into the green channel.  This is why the underlying 
 # map output looks green in the display image
