@@ -1,9 +1,6 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from itertools import count
-from IPython import display
 
 # Identify pixels above the threshold
 # Threshold of RGB > 160 does a nice job of identifying ground pixels only
@@ -166,20 +163,27 @@ def perception_step(Rover):
     # Update Rover pixel distances and angles
     Rover.nav_dists, Rover.nav_angles = to_polar_coords(xpix, ypix)
 
-    
+    # To activate debugging mode, set the debugging_mode flag to True
+    # To deactivate debugging mode, set the debugging_mode flag to False
+    # Note that you can not use manual mode during autonomous mode if the debugging mode is activated
+    # To be able to use the manual mode during autonomous mode, deactivate debugging mode
+    # To exit the code while in debugging mode, type ctrl+c two or three times in the terminal
+    # or close the terminal window
     debugging_mode = True
-
     if debugging_mode:
-        plt.figure(1, figsize=(12,9))
+        plt.figure(1, figsize=(10,12))
         plt.clf()
-        plt.subplot(221)
+        plt.subplot(321)
         plt.imshow(Rover.img)
-        plt.subplot(222)
+        plt.title('Rover image')
+        plt.subplot(322)
         plt.imshow(warped)
-        plt.subplot(223)
+        plt.title('Bird Eye View')
+        plt.subplot(323)
         plt.imshow(threshed, cmap='gray')
-        plt.subplot(224)
-        plt.plot(xpix, ypix, '.')
+        plt.title('Threshed image for terrain detection')
+        plt.subplot(324)
+        plt.plot(xpix, ypix, '.', color='blue')
         plt.ylim(-160, 160)
         plt.xlim(0, 160)
         arrow_length = 100
@@ -187,6 +191,15 @@ def perception_step(Rover):
         x_arrow = arrow_length * np.cos(mean_dir)
         y_arrow = arrow_length * np.sin(mean_dir)
         plt.arrow(0, 0, x_arrow, y_arrow, color='red', zorder=2, head_width=10, width=2)
+        plt.title('Approximate direction where the Rover should move')
+        plt.subplot(325)
+        plt.imshow(obstacles_thresh, cmap='gray')
+        plt.title('Threshed image for obstacles detection')
+        plt.subplot(326)
+        plt.plot(xobstacles, yobstacles, '.', color='green')
+        plt.ylim(-160, 160)
+        plt.xlim(0, 160)
+        plt.title('Rover-centric obstacle pixels')
         plt.pause(1)
 
     # if rocks_thresh.any():
