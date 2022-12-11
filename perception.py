@@ -229,7 +229,7 @@ def perception_step(Rover):
         fig3.axes.get_yaxis().set_visible(False)
         fig4.axes.get_xaxis().set_visible(False)
         fig4.axes.get_yaxis().set_visible(False)
-        plt.savefig('./output/IMG/pipeline_{}.jpg'.format(Rover.counter), bbox_inches='tight', pad_inches = 0)
+        plt.savefig('./output/pipeline_{}.jpg'.format(Rover.counter), bbox_inches='tight', pad_inches = 0)
         Rover.counter += 1
         plt.pause(1)
 
