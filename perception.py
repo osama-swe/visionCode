@@ -169,7 +169,7 @@ def perception_step(Rover):
     # To be able to use the manual mode during autonomous mode, deactivate debugging mode
     # To exit the code while in debugging mode, type ctrl+c two or three times in the terminal
     # or close the terminal window
-    debugging_mode = True
+    debugging_mode = False
     if debugging_mode:
         plt.figure(1, figsize=(10,12))
         plt.clf()
@@ -200,6 +200,37 @@ def perception_step(Rover):
         plt.ylim(-160, 160)
         plt.xlim(0, 160)
         plt.title('Rover-centric obstacle pixels')
+        plt.pause(1)
+
+    generate_video = True
+    if generate_video:
+        plt.figure(2, figsize=(12,9))
+        plt.clf()
+        plt.subplot(321)
+        fig1 = plt.imshow(Rover.img)
+        plt.subplot(322)
+        fig2 = plt.imshow(warped)
+        plt.subplot(323)
+        fig3 = plt.imshow(threshed, cmap='gray')
+        plt.subplot(324)
+        plt.plot(xpix, ypix, '.')
+        plt.ylim(-160, 160)
+        plt.xlim(0, 160)
+        arrow_length = 100
+        mean_dir = np.mean(Rover.nav_angles)
+        x_arrow = arrow_length * np.cos(mean_dir)
+        y_arrow = arrow_length * np.sin(mean_dir)
+        fig4 = plt.arrow(0, 0, x_arrow, y_arrow, color='red', zorder=2, head_width=10, width=2)
+        fig1.axes.get_xaxis().set_visible(False)
+        fig1.axes.get_yaxis().set_visible(False)
+        fig2.axes.get_xaxis().set_visible(False)
+        fig2.axes.get_yaxis().set_visible(False)
+        fig3.axes.get_xaxis().set_visible(False)
+        fig3.axes.get_yaxis().set_visible(False)
+        fig4.axes.get_xaxis().set_visible(False)
+        fig4.axes.get_yaxis().set_visible(False)
+        plt.savefig('./output/IMG/pipeline_{}.jpg'.format(Rover.counter), bbox_inches='tight', pad_inches = 0)
+        Rover.counter += 1
         plt.pause(1)
 
     # if rocks_thresh.any():
